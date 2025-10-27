@@ -211,7 +211,7 @@
     try {
       // استدعاء API أو JSON أو Excel حسب مشروعك
       // مثال: fetch من API وهمي
-      const res = await fetch('/api/search?number=${encodeURIComponent(number)}&year=${encodeURIComponent(year)}');
+      const res = await fetch('search/api/search?number=${encodeURIComponent(number)}&year=${encodeURIComponent(year)}');
 
       const data = await res.json();
 
@@ -258,4 +258,5 @@
 
 </script>
 </body>
+
 </html>
