@@ -1,0 +1,69 @@
+<!-- 📄 header.html -->
+<header class="main-header">
+    <img src="./images/background.png" alt="شعار النيابة العامة" class="logo">
+    <div class="header-text">
+        <h2>النيابة العامة</h2>
+        <h3>نيابة الشئون الاقتصادية وغسل الأموال</h3>
+        <h4>بالإسكندرية</h4>
+    </div>
+    <div class="left-text">
+        وحدة الفحص المتنوع
+    </div>
+</header>
+
+<style>
+    /* 🎨 تنسيق الهيدر */
+    .main-header {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        background-color: rgba(0, 0, 0, 0.452);
+        padding: 10px 20px;
+        color: white;
+        font-family: "Lateef", "Cairo", sans-serif;
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+       
+    }
+
+    .main-header .logo {
+        width: 70px;
+        height: auto;
+        border-radius: 8px;
+    }
+
+    .header-text {
+        text-align: center;
+        flex-grow: 1;
+    }
+
+    .header-text h2,
+    .header-text h3,
+    .header-text h4 {
+        margin: 0;
+        line-height: 1.2;
+    }
+
+    .left-text {
+        font-weight: bold;
+        font-size: 1rem;
+        white-space: nowrap;
+    }
+
+    /* 📱 تصميم متجاوب للموبايل */
+    @media (max-width: 600px) {
+        .main-header {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .left-text {
+            margin-top: 5px;
+        }
+
+        .main-header .logo {
+            width: 60px;
+        }
+    }
+</style>

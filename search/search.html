@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <title>الاستفسار عن الفحص</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+ 
+  <!-- خطوط وأيقونات -->
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Lateef:wght@200;300;400;500;600;700;800&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+
+  <style>
+    body {
+       margin: 0;
+      padding: 0 0 80px 0;
+      font-family: "Lateef", "Cairo", sans-serif;
+      /* background-image: url("images/background.png");
+      background-repeat: no-repeat;
+      background-size: 100% 100%;
+      background-attachment: scroll;
+      background-color: rgba(0, 0, 0, 0.5);
+      background-blend-mode: overlay; */
+        background: linear-gradient(to bottom right, #0a1f44, #1e3c72, #2a5298);
+
+      color: #fff;
+      text-align: center;
+      position: relative;
+      min-height: 100vh;
+    }
+
+    /* ✅ الهيدر */
+    /* .main-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background-color: rgba(0, 0, 0, 0.4);
+      padding: 10px 20px;
+      color: white;
+      font-family: "Lateef", "Cairo", sans-serif;
+      position: sticky;
+      top: 0;
+      z-index: 1000;
+    }
+
+    .main-header .logo {
+      width: 70px;
+      height: auto;
+      border-radius: 8px;
+    }
+
+    .header-text {
+      text-align: center;
+      flex-grow: 1;
+    }
+
+    .header-text h2,
+    .header-text h3,
+    .header-text h4 {
+      margin: 0;
+      line-height: 1.2;
+    }
+
+    .left-text {
+      font-weight: bold;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    @media (max-width: 600px) {
+      .main-header {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .left-text {
+        margin-top: 5px;
+      }
+
+      .main-header .logo {
+        width: 60px;
+      }
+    } */
+
+    /* ✅ محتوى الصفحة */
+    #main-content {
+      padding: 20px;
+    }
+
+    h1 {
+      color: black;
+      margin-bottom: 20px;
+    }
+
+    input, datalist {
+      padding: 10px;
+      margin: 5px;
+      width: 90%;
+      max-width: 300px;
+      border: 1px solid #ccc;
+      border-radius: 8px;
+      font-size: 16px;
+    }
+
+    button {
+      background-color: #5b6a7a;
+      color: white;
+      border: none;
+      padding: 10px 5px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+
+    button:hover {
+      background-color: #80b0e4;
+    }
+
+    table {
+      width: 95%;
+      max-width: 800px;
+      margin: 20px auto;
+      border-collapse: collapse;
+      background: white;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+      border-radius: 10px;
+      overflow: hidden;
+      table-layout: fixed;
+    }
+
+    th {
+      background-color: #789ec7;
+      color: white;
+      text-align: right;
+      padding: 10px;
+      width: 35%;
+    }
+
+    td {
+      padding: 10px;
+      text-align: right;
+      word-break: break-word;
+      overflow-wrap: anywhere;
+      white-space: normal;
+      vertical-align: top;
+      color: black;
+    }
+
+    .prewrap { white-space: pre-wrap; word-break: break-word; }
+
+    @media (max-width: 600px) {
+      table { font-size: 14px; }
+      input, button { width: 50%; font-size: 14px; }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- ✅ تحميل الهيدر من ملف خارجي -->
+  <div id="header"></div>
+
+  <!-- ✅ محتوى الصفحة -->
+  <div id="main-content">
+    <h1>الاستفسار عن الفحص</h1>
+
+    <input id="number" placeholder="رقم الفحص" list="previousNumbers">
+    <datalist id="previousNumbers"></datalist>
+
+    <input id="year" placeholder="السنة" list="previousYears">
+    <datalist id="previousYears"></datalist>
+
+    <button id="searchBtn">بحث</button>
+
+    <div id="result" style="margin-top:20px; font-weight:bold;"></div>
+  </div>
+
+  <script>
+    // ✅ تحميل الهيدر من ملف منفصل
+    fetch("header.html")
+      .then(res => res.text())
+      .then(html => document.getElementById("header").innerHTML = html);
+      
+  // ✅ تحميل القيم المحفوظة من localStorage
+  // ✅ تحميل القيم المحفوظة من localStorage
+  const storedNumbers = JSON.parse(localStorage.getItem("searchNumbers") || "[]");
+  const storedYears = JSON.parse(localStorage.getItem("searchYears") || "[]");
+
+  function updateDatalist(id, data) {
+    document.getElementById(id).innerHTML =
+      data.map(value => <option value="${value}"></option>).join("");
+  }
+
+  updateDatalist("previousNumbers", storedNumbers);
+  updateDatalist("previousYears", storedYears);
+
+  function saveValue(array, key, value) {
+    if (value && !array.includes(value)) {
+      array.unshift(value);
+      if (array.length > 10) array.pop();
+      localStorage.setItem(key, JSON.stringify(array));
+    }
+  }
+
+  async function search(number, year) {
+    const resultDiv = document.getElementById("result");
+    resultDiv.innerHTML = "جارٍ البحث...";
+
+    try {
+      // استدعاء API أو JSON أو Excel حسب مشروعك
+      // مثال: fetch من API وهمي
+      const res = await fetch('/api/search?number=${encodeURIComponent(number)}&year=${encodeURIComponent(year)}');
+
+      const data = await res.json();
+
+      if (data.success) {
+        const r = data.result;
+        resultDiv.innerHTML = `
+          <table>
+            <tr><th>رقم الفحص</th><td>${r.number || "-"}</td></tr>
+            <tr><th>السنة</th><td>${r.year || "-"}</td></tr>
+            <tr><th>رقم القضية</th><td>${r.caseNumber || "-"}</td></tr>
+            <tr><th>اسم مقدم الطلب</th><td>${r.applicant || "-"}</td></tr>
+            <tr><th>حالة الطلب</th><td>${r.status || "-"}</td></tr>
+            <tr><th>التأشيرات</th><td class="prewrap">${r.visa || "-"}</td></tr>
+            <tr><th>ملاحظات</th><td class="prewrap">${r.notes || "-"}</td></tr>
+          </table>`;
+      } else {
+        resultDiv.textContent = data.message || "لم يتم العثور على بيانات لهذا الفحص.";
+      }
+
+      // حفظ القيم
+      saveValue(storedNumbers, "searchNumbers", number);
+      saveValue(storedYears, "searchYears", year);
+
+      updateDatalist("previousNumbers", storedNumbers);
+      updateDatalist("previousYears", storedYears);
+
+    } catch (err) {
+      console.error(err);
+      resultDiv.textContent = "حدث خطأ في الاتصال بالسيرفر.";
+    }
+  }
+
+  document.getElementById("searchBtn").addEventListener("click", () => {
+    const number = document.getElementById("number").value.trim();
+    const year = document.getElementById("year").value.trim();
+
+    if (!number || !year) {
+      document.getElementById("result").textContent = "من فضلك أدخل رقم الفحص والسنة.";
+      return;
+    }
+
+    search(number, year);
+  });
+
+</script>
+</body>
+</html>
